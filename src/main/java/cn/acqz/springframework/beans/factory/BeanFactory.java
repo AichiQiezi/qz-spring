@@ -17,4 +17,9 @@ public interface BeanFactory {
      * @throws  BeansException – if the bean could not be created or there is no such bean definition
      */
     Object getBean(String name) throws BeansException;
+
+    Object getBean(String name, Object... args) throws BeansException;
+
+    <T> T getBean(String name, Class<T> requiredType) throws BeansException;
+
 }

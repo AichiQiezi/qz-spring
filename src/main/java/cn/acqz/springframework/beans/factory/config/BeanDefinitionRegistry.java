@@ -14,4 +14,12 @@ public interface BeanDefinitionRegistry {
      * @param beanDefinition
      */
     void registerBeanDefinition(String beanName, BeanDefinition beanDefinition);
+
+    boolean containsBeanDefinition(String beanName);
+
+    /**
+     * Return the names of all beans defined in this registry.
+     *
+     */
+    String[] getBeanDefinitionNames();
 }
