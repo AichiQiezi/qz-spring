@@ -6,7 +6,11 @@ import cn.acqz.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import cn.acqz.springframework.beans.factory.config.BeanPostProcessor;
 import cn.acqz.springframework.context.ConfigurableApplicationContext;
 import cn.acqz.springframework.core.io.DefaultResourceLoader;
+import cn.hutool.core.lang.Assert;
+import com.sun.istack.internal.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,18 +19,32 @@ import java.util.Map;
  */
 public abstract class AbstractApplicationContext extends DefaultResourceLoader implements ConfigurableApplicationContext {
 
+    private final List<BeanFactoryPostProcessor> beanFactoryPostProcessors = new ArrayList<>();
+    /**
+     * Reference to the JVM shutdown hook, if registered
+     */
+    @Nullable
+    private Thread shutdownHook;
+    /**
+     * Synchronization monitor for the "refresh" and "destroy".
+     */
+    private final Object startupShutdownMonitor = new Object();
+
+
     @Override
     public void refresh() throws BeansException {
         // create BeanFactory，and load BeanDefinition
-        refreshBeanFactory();
+        synchronized (startupShutdownMonitor){
+            refreshBeanFactory();
 
-        ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+            ConfigurableListableBeanFactory beanFactory = getBeanFactory();
 
-        invokeBeanFactoryPostProcessors(beanFactory);
+            invokeBeanFactoryPostProcessors(beanFactory);
 
-        registerBeanPostProcessors(beanFactory);
+            registerBeanPostProcessors(beanFactory);
 
-        beanFactory.preInstantiateSingletons();
+            beanFactory.preInstantiateSingletons();
+        }
     }
 
     private void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) {
@@ -37,13 +55,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
     }
 
     private void invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory) {
-        Map<String, BeanFactoryPostProcessor> beanFactoryPostProcessorMap = beanFactory.getBeansOfType(BeanFactoryPostProcessor.class);
-        for (BeanFactoryPostProcessor beanFactoryPostProcessor : beanFactoryPostProcessorMap.values()) {
+        for (BeanFactoryPostProcessor beanFactoryPostProcessor : beanFactoryPostProcessors) {
             beanFactoryPostProcessor.postProcessBeanFactory(beanFactory);
         }
     }
 
-    protected abstract void refreshBeanFactory();
+    protected abstract void refreshBeanFactory() throws BeansException;
 
     @Override
     public <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException {
@@ -70,5 +87,24 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         return getBeanFactory().getBean(name, requiredType);
     }
 
+    public void addBeanFactoryPostProcessor(BeanFactoryPostProcessor postProcessor) {
+        Assert.notNull(postProcessor, "BeanFactoryPostProcessor must not be null");
+        this.beanFactoryPostProcessors.add(postProcessor);
+    }
+
     protected abstract ConfigurableListableBeanFactory getBeanFactory();
+
+    @Override
+    public void registerShutdownHook() {
+        if (this.shutdownHook == null){
+            this.shutdownHook = new Thread(this::close);
+            Runtime.getRuntime().addShutdownHook(this.shutdownHook);
+        }
+    }
+
+    @Override
+    public void close() {
+        getBeanFactory().destroySingletons();
+    }
+
 }

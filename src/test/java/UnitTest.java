@@ -4,6 +4,7 @@ import cn.acqz.springframework.beans.factory.config.BeanDefinition;
 import cn.acqz.springframework.beans.factory.config.BeanReference;
 import cn.acqz.springframework.beans.factory.support.DefaultListableBeanFactory;
 import cn.acqz.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import cn.acqz.springframework.context.support.ClassPathXmlApplicationContext;
 import common.MyBeanFactoryPostProcessor;
 import common.MyBeanPostProcessor;
 import domain.UserDao;
@@ -93,5 +94,17 @@ public class UnitTest {
         UserService userService = beanFactory.getBean("userService", UserService.class);
         String result = userService.queryUserInfo();
         System.out.println("测试结果：" + result);
+    }
+
+    @Test
+    public void test_init_destroy_method(){
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        applicationContext.registerShutdownHook();
+
+        // 2. 获取Bean对象调用方法
+        UserService userService = applicationContext.getBean("userService", UserService.class);
+        String result = userService.queryUserInfo();
+        System.out.println("测试结果：" + result);
+
     }
 }

@@ -4,8 +4,6 @@ import cn.acqz.springframework.beans.BeansException;
 import cn.acqz.springframework.beans.factory.ConfigurableListableBeanFactory;
 import cn.acqz.springframework.beans.factory.config.BeanDefinition;
 import cn.acqz.springframework.beans.factory.config.BeanDefinitionRegistry;
-import cn.acqz.springframework.beans.factory.config.BeanPostProcessor;
-import cn.acqz.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,7 +26,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
     @Override
     public void preInstantiateSingletons() throws BeansException {
-
+        beanDefinitionMap.keySet().forEach(this::getBean);
     }
 
     @Override
