@@ -14,4 +14,7 @@ public interface SingletonBeanRegistry {
      * @return the registered singleton object, or null if none found
      */
     Object getSingleton(String beanName);
+
+    void registerSingleton(String beanName, Object singletonObject);
+
 }

@@ -8,4 +8,5 @@ import cn.acqz.springframework.beans.factory.Aware;
  */
 
 public interface ApplicationContextAware extends Aware {
+    void setApplicationContext(ApplicationContext applicationContext);
 }

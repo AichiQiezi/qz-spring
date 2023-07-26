@@ -19,9 +19,20 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
 
     protected final Map<String, DisposableBean> disposableBeans = new HashMap<>();
 
+    /**
+     * Internal marker for a null singleton object:
+     * used as marker value for concurrent Maps (which don't support null values).
+     */
+    protected static final Object NULL_OBJECT = new Object();
+
     @Override
     public Object getSingleton(String beanName) {
         return singletonObjects.get(beanName);
+    }
+
+    @Override
+    public void registerSingleton(String beanName, Object singletonObject) {
+        singletonObjects.put(beanName, singletonObject);
     }
 
     protected void addSingleton(String beanName, Object singletonObject) {
@@ -44,6 +55,10 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
                 throw new BeansException("Destroy method on bean with name '" + beanName + "' threw an exception", e);
             }
         }
+    }
+
+    public Object getSingletonMutex() {
+        return this.singletonObjects;
     }
 }
 

@@ -1,5 +1,7 @@
 package cn.acqz.springframework.util;
 
+import cn.acqz.springframework.context.ApplicationListener;
+
 /**
  * get the context classloader of the current thread
  * @author feng
@@ -22,4 +24,20 @@ public class ClassUtils {
         return cl;
     }
 
+
+    /**
+     * Check whether the specified class is a CGLIB-generated class.
+     * @param clazz the class to check
+     */
+    public static boolean isCglibProxyClass(Class<?> clazz) {
+        return (clazz != null && isCglibProxyClassName(clazz.getName()));
+    }
+
+    /**
+     * Check whether the specified class name is a CGLIB-generated class.
+     * @param className the class name to check
+     */
+    public static boolean isCglibProxyClassName(String className) {
+        return (className != null && className.contains("$$"));
+    }
 }

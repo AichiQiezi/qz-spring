@@ -5,6 +5,7 @@ import cn.acqz.springframework.beans.factory.ConfigurableListableBeanFactory;
 import cn.acqz.springframework.beans.factory.config.BeanDefinition;
 import cn.acqz.springframework.beans.factory.config.BeanDefinitionRegistry;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -31,7 +32,14 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
     @Override
     public <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException {
-        return null;
+        Map<String, T> result = new HashMap<>();
+        beanDefinitionMap.forEach((beanName, beanDefinition) -> {
+            Class beanClass = beanDefinition.getBeanClass();
+            if (type.isAssignableFrom(beanClass)) {
+                result.put(beanName, (T) getBean(beanName));
+            }
+        });
+        return result;
     }
 
     @Override
