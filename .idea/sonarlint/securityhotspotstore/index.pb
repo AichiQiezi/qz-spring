@@ -21,8 +21,6 @@ G.idea/sonarlint/issuestore/8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d,b\4\b4
 Vsrc/main/java/cn/acqz/springframework/beans/factory/support/InstantiationStrategy.java,3\2\32935b2838f79b9630ee3f35c0980a30ee183a77
 ñ
 fsrc/main/java/cn/acqz/springframework/beans/factory/support/CglibSubclassingInstantiationStrategy.java,a\a\aad4c7b17f40a4911ba77e1824266dc972c7630b
-7
-pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 \
 ,.idea/inspectionProfiles/Project_Default.xml,4\9\496a238a6afa168dbaf6efd37bb459331589579c
 k
@@ -37,10 +35,6 @@ n
 Usrc/main/java/cn/acqz/springframework/beans/factory/support/BeanDefinitionReader.java,6\1\61f49bc4f7d0397c8c962537d093f277a82d129d
 d
 4src/test/java/common/MyBeanFactoryPostProcessor.java,e\5\e5e2a948bf5b1c09112c3890865bb5f67a10afee
-U
-%src/test/java/domain/UserService.java,9\c\9c8a338799638f475156abca875809cdd5623c03
-]
--src/test/java/common/MyBeanPostProcessor.java,4\2\426a80a3731306a37de234bbe26aa78cadc2a537
 Å
 Qsrc/main/java/cn/acqz/springframework/beans/factory/config/BeanPostProcessor.java,9\c\9c9123c2afdabebb27e9d5898a40b3d0cc1b98e3
 ç

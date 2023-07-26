@@ -25,8 +25,6 @@ u
 Esrc/main/java/cn/acqz/springframework/core/io/FileSystemResource.java,0\8\08be469d1db88731242d359284382d25e2017818
 Ü
 Vsrc/main/java/cn/acqz/springframework/beans/factory/support/InstantiationStrategy.java,3\2\32935b2838f79b9630ee3f35c0980a30ee183a77
-7
-pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 n
 >src/main/java/cn/acqz/springframework/beans/PropertyValue.java,b\5\b58b63f158b345952030850676dc5b7680405e1a
 o
@@ -37,10 +35,6 @@ n
 >src/main/java/cn/acqz/springframework/core/io/UrlResource.java,1\d\1d645f3dc5cc831631e1f667a1b3ca5461236b57
 d
 4src/test/java/common/MyBeanFactoryPostProcessor.java,e\5\e5e2a948bf5b1c09112c3890865bb5f67a10afee
-U
-%src/test/java/domain/UserService.java,9\c\9c8a338799638f475156abca875809cdd5623c03
-]
--src/test/java/common/MyBeanPostProcessor.java,4\2\426a80a3731306a37de234bbe26aa78cadc2a537
 Å
 Qsrc/main/java/cn/acqz/springframework/beans/factory/config/BeanPostProcessor.java,9\c\9c9123c2afdabebb27e9d5898a40b3d0cc1b98e3
 ç
