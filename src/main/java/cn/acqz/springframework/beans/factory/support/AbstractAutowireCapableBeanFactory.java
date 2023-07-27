@@ -4,10 +4,7 @@ import cn.acqz.springframework.beans.*;
 import cn.acqz.springframework.beans.factory.Aware;
 import cn.acqz.springframework.beans.factory.DisposableBean;
 import cn.acqz.springframework.beans.factory.InitializingBean;
-import cn.acqz.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import cn.acqz.springframework.beans.factory.config.BeanDefinition;
-import cn.acqz.springframework.beans.factory.config.BeanPostProcessor;
-import cn.acqz.springframework.beans.factory.config.BeanReference;
+import cn.acqz.springframework.beans.factory.config.*;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 
@@ -30,9 +27,42 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     // 实例化-->属性注入-->初始化
     @Override
     protected Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException {
+        Object bean = resolveBeforeInstantiation(beanName, beanDefinition);
+        if (null != bean) {
+            return bean;
+        }
+
+        return doCreateBean(beanName, beanDefinition, args);
+    }
+
+    private Object resolveBeforeInstantiation(String beanName, BeanDefinition beanDefinition) {
+        Object bean = applyBeanPostProcessorsBeforeInstantiation(beanDefinition.getBeanClass(), beanName);
+        if (null != bean) {
+            bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
+        }
+        return bean;
+    }
+
+    private Object applyBeanPostProcessorsBeforeInstantiation(Class<?> beanClass, String beanName) {
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                Object result = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessBeforeInstantiation(beanClass, beanName);
+                if (null != result) return result;
+            }
+        }
+        return null;
+    }
+
+
+    protected Object doCreateBean(String beanName, BeanDefinition beanDefinition, Object[] args) {
         Object bean;
         try {
             bean = createBeanInstance(beanDefinition, beanName, args);
+            // 处理循环依赖
+            if (beanDefinition.isSingleton()) {
+                Object finalBean = bean;
+                addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, beanDefinition, finalBean));
+            }
             // Fill attribute
             applyPropertyValues(beanName, bean, beanDefinition);
             // execute initial method and beanPostProcessor
@@ -45,10 +75,25 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
 
         // determine whether it is a singleton
+        Object exposedObject = bean;
         if (beanDefinition.isSingleton()){
-            addSingleton(beanName, bean);
+            // 从二级缓存中取出，加入一级缓存中
+            exposedObject = getSingleton(beanName);
+            registerSingleton(beanName, exposedObject);
         }
-        return bean;
+        return exposedObject;
+    }
+
+    private Object getEarlyBeanReference(String beanName, BeanDefinition beanDefinition, Object bean) {
+        Object exposedObject = bean;
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                exposedObject = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).getEarlyBeanReference(exposedObject, beanName);
+                if (null == exposedObject) return exposedObject;
+            }
+        }
+
+        return exposedObject;
     }
 
     private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {

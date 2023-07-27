@@ -43,8 +43,6 @@ Qsrc/main/java/cn/acqz/springframework/beans/factory/config/BeanPostProcessor.ja
 Vsrc/main/java/cn/acqz/springframework/beans/factory/config/BeanDefinitionRegistry.java,d\3\d3ef112f411230edf0183a3d1fda044f8d7466f2
 ‰
 Ysrc/main/java/cn/acqz/springframework/context/support/ClassPathXmlApplicationContext.java,c\c\cc731fceb154d5dad8e40b775d6279174f9a8653
-ˆ
-Xsrc/main/java/cn/acqz/springframework/beans/factory/config/BeanFactoryPostProcessor.java,9\f\9fa2f7fb9de6689174f4064669e7de85a6f65c85
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
@@ -54,7 +52,3 @@ Gsrc/main/java/cn/acqz/springframework/beans/factory/DisposableBean.java,6\8\68
 Vsrc/main/java/cn/acqz/springframework/beans/factory/support/DisposableBeanAdapter.java,f\5\f5234bfd2cf611b7a660f80538d99c4035992f47
 y
 Isrc/main/java/cn/acqz/springframework/beans/factory/InitializingBean.java,8\9\8984e1f297b1dfd5cf043617f2ecfece97c29846
-Q
-!src/test/java/domain/UserDao.java,5\2\52b7d2cf4ac83016001a6818eb8db938b8d38348
-„
-Tsrc/main/java/cn/acqz/springframework/beans/factory/xml/XmlBeanDefinitionReader.java,2\7\273eabf3688b664dfb410786abcf39f3b89c36c6
